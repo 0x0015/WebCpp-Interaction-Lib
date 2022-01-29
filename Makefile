@@ -4,7 +4,7 @@ OBJS	= Elements/Element_em.cpp.o \
 OUT	= libDOMscripten.a
 CXX	= em++
 CC      = emcc
-BUILD_CXX_FLAGS	 = -Wall -std=c++17 -g
+BUILD_CXX_FLAGS	 = -Wall -std=c++17 -g -fexceptions
 BULID_CC_FLAGS   =
 LINK_OPTS	 =
 

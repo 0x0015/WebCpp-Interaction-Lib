@@ -12,11 +12,17 @@ public:
 		}
 		return *this;
 	};
+	property<T>& operator = (T val){
+		if(set){
+			set(val);
+		}
+		return *this;
+	};
 	operator const T() const{
 		if(get){
 			return(get());
 		}else{
-			T def;
+			T def = T();
 			return(def);
 		}
 	}
