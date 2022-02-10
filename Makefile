@@ -1,5 +1,7 @@
-OBJS	= Elements/Element_em.cpp.o \
-	  JS_Access/JS_Man_em.cpp.o
+OBJS	= DOM/Elements/Element_em.cpp.o \
+	  DOM/JS_Access/JS_Man_em.cpp.o \
+	  Storage/Base64.cpp.o \
+	  Storage/Storage_em.cpp.o 
 
 OUT	= libDOMscripten.a
 CXX	= em++

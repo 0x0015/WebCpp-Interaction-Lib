@@ -4,6 +4,14 @@
 
 JS_Man* GLOBAL_ACCESS = new JS_Man();
 
+class uniqueVarHelper{
+public:
+	static inline uint32_t currentID = 1;//starting at 0 doesn't work for some reason
+	static inline uint32_t getUniqueID(){
+		return(currentID++);
+	}
+};
+
 EM_JS(void, JS_Man_construct, (), {
 	window.JS_Man = {};
 });
@@ -17,12 +25,13 @@ EM_JS(bool, JS_Man_freeVar, (unsigned int hash), {
 });
 
 JS_Man::JS_Man(){
-	srand(time(0));
 	JS_Man_construct();
 }
 
 JS_Man::~JS_Man(){
-	
+	for(auto& i : vars){
+		freeVar(i);
+	}
 }
 
 uint32_t JS_Man::allocateVar(std::string& name){
@@ -44,8 +53,10 @@ bool JS_Man::freeVar(uint32_t get){
 			vars.erase(strHash);
 		}
 		return(r);
+	}else{
+		std::cerr<<"Failed to free var with ID: "<<get<<" as it does not exist."<<std::endl;
+		return(false);
 	}
-	return(false);
 }
 
 bool JS_Man::freeVar(std::string& name){
@@ -53,8 +64,8 @@ bool JS_Man::freeVar(std::string& name){
 	return(freeVar(strHash));
 }
 
-unsigned int getRandom(){
-	return(rand());
+uint32_t getRandom(){
+	return(uniqueVarHelper::getUniqueID());
 }
 
 uint32_t JS_Man::allocateVar(){
@@ -68,3 +79,11 @@ uint32_t JS_Man::allocateVar(){
 	return(strHash);
 }
 
+EM_JS(void, JS_Man_evalJS, (const char* code), {
+	let func = new Function(UTF8ToString(code));
+	func();
+});
+
+void JS_Man::evalJS(std::string& code){
+	JS_Man_evalJS(code.c_str());
+}

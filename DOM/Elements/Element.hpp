@@ -3,7 +3,7 @@
 #include <memory>
 #include <functional>
 #include <unordered_map>
-#include "../property.hpp"
+#include "../../property.hpp"
 
 extern std::unordered_map<uint32_t, std::function<void()>>* globalFunctorTable;
 
@@ -20,6 +20,16 @@ public:
 		 }),
 		([&](std::string& i){
 			set_dom_value(i);
+		 })
+	};
+	std::string get_dom_innerHtml();
+	void set_dom_innerHTML(std::string newVal);
+	property<std::string> dom_innerHTML = {
+		([&]() -> std::string {
+			return(get_dom_innerHtml());
+		 }),
+		([&](std::string& i){
+			set_dom_innerHTML(i);
 		 })
 	};
 	property<std::function<void()>> dom_onclick = {

@@ -12,6 +12,7 @@ public:
 	uint32_t allocateVar();
 	bool freeVar(std::string& name);
 	bool freeVar(uint32_t get);
+	void evalJS(std::string& code);
 };
 
 extern JS_Man* GLOBAL_ACCESS;
