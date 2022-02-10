@@ -19,4 +19,5 @@ int main(){
 	for(auto& i : buttons){
 		i->dom_innerHTML = "haha new value";
 	}
+	button2->dom_style["display"] = (std::string)"none";
 }

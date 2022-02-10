@@ -81,6 +81,21 @@ void Element::set_dom_innerHTML(std::string newVal){
 	Element_setInnerHTML(id, newVal.c_str());
 }
 
+EM_JS(bool, Element_getDisabled, (uint32_t hash), {
+	return(JS_Man["A" + hash].disabled);
+});
+
+bool Element::get_dom_disabled(){
+	return(Element_getDisabled(id));
+}
+
+EM_JS(void, Element_setDisabled, (uint32_t hash, bool value), {
+	JS_Man["A" + hash].disabled = value;
+});
+
+void Element::set_dom_disabled(bool newVal){
+	Element_setDisabled(id, newVal);
+}
 
 extern "C" {
 	void EMSCRIPTEN_KEEPALIVE callStdFunc(uint32_t hash);
@@ -134,5 +149,48 @@ std::vector<std::shared_ptr<Element>> Element::getByClassName(std::string classn
 		output.push_back(newElm);
 	}
 	GLOBAL_ACCESS->freeVar(tempID);
+	return(output);
+}
+
+EM_JS(void, Element_AssignChildElement, (uint32_t hash, uint32_t newHash, uint32_t index), {
+	JS_Man["A" + newHash] = JS_Man["A" + hash].children[index];
+});
+
+std::shared_ptr<Element> Element::get_dom_child(int index){
+	std::shared_ptr<Element> output = std::make_shared<Element>();
+	Element_AssignChildElement(id, output->id, index);
+	return(output);
+}
+
+EM_JS(unsigned int, Element_getChildCount, (uint32_t hash), {
+	return(JS_Man["A" + hash].childElementCount);
+});
+
+unsigned int Element::get_dom_childCount(){
+	return(Element_getChildCount(id));
+}
+
+EM_JS(void, Element_setStyle, (uint32_t hash, const char* whatStyle, const char* value), {
+	JS_Man["A" + hash].style[UTF8ToString(whatStyle)] = UTF8ToString(value);
+});
+
+void Element::set_dom_style(std::string style, std::string value){
+	Element_setStyle(id, style.c_str(), value.c_str());
+}
+
+EM_JS(unsigned int, Element_getStyleLen, (uint32_t hash, const char* whatStyle), {
+	return(lengthBytesUTF8(JS_Man["A" + hash].style[UTF8ToString(whatStyle)]));
+});
+
+EM_JS(void, Element_getStyle, (uint32_t hash, const char* whatStyle, char* str, uint32_t len), {
+	stringToUTF8(JS_Man["A" + hash].style[UTF8ToString(whatStyle)], str, len+1);
+});
+
+std::string Element::get_dom_style(std::string style){
+	std::string output;
+	unsigned int maxLength = Element_getStyleLen(id, style.c_str());
+	output.resize(maxLength);
+	Element_getStyle(id, style.c_str(), output.data(), maxLength);
+	output.shrink_to_fit();
 	return(output);
 }
