@@ -3,7 +3,7 @@ OBJS	= DOM/Elements/Element_em.cpp.o \
 	  Storage/Base64.cpp.o \
 	  Storage/Storage_em.cpp.o 
 
-OUT	= libDOMscripten.a
+OUT	= libInteraction.a
 CXX	= em++
 CC      = emcc
 BUILD_CXX_FLAGS	 = -Wall -std=c++17 -g -fexceptions
