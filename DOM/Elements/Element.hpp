@@ -43,6 +43,16 @@ public:
 			set_dom_disabled(i);
 		 })
 	};
+	bool get_dom_checked();
+	void set_dom_checked(bool newVal);
+	property<bool> dom_checked = {
+		([&]() -> bool {
+			return(get_dom_disabled());
+		 }),
+		([&](bool& i){
+			set_dom_disabled(i);
+		 })
+	};
 	property<std::function<void()>> dom_onclick = {
 		([&]() -> std::function<void()> {
 			return(get_dom_onclick());

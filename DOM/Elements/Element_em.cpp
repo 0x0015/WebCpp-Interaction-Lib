@@ -97,6 +97,21 @@ void Element::set_dom_disabled(bool newVal){
 	Element_setDisabled(id, newVal);
 }
 
+EM_JS(bool, Element_getChecked, (uint32_t hash), {
+	return(JS_Man["A" + hash].checked);
+});
+
+bool Element::get_dom_checked(){
+	return(Element_getChecked(id));
+}
+
+EM_JS(void, Element_setChecked, (uint32_t hash, bool value), {
+	JS_Man["A" + hash].checked = value;
+});
+
+void Element::set_dom_checked(bool newVal){
+	Element_setChecked(id, newVal);
+}
 extern "C" {
 	void EMSCRIPTEN_KEEPALIVE callStdFunc(uint32_t hash);
 }
