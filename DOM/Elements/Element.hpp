@@ -47,10 +47,10 @@ public:
 	void set_dom_checked(bool newVal);
 	property<bool> dom_checked = {
 		([&]() -> bool {
-			return(get_dom_disabled());
+			return(get_dom_checked());
 		 }),
 		([&](bool& i){
-			set_dom_disabled(i);
+			set_dom_checked(i);
 		 })
 	};
 	property<std::function<void()>> dom_onclick = {
